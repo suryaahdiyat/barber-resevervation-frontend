@@ -1,0 +1,19 @@
+import { createRouter, createWebHistory } from "vue-router";
+import CustomerListView from "../views/CustomerListView.vue";
+import CustomerFormView from "../views/CustomerFormView.vue";
+import NotFoundView from "../views/NotFoundView.vue";
+
+const routes = [
+  { path: "/", redirect: "/customers" },
+  { path: "/customers", component: CustomerListView },
+  { path: "/customers/add", component: CustomerFormView },
+  { path: "/customers/edit/:id", component: CustomerFormView },
+  { path: "/:pathMatch(.*)*", component: NotFoundView },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router;
