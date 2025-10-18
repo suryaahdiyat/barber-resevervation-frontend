@@ -22,6 +22,7 @@
         <tr>
           <th class="p-3 text-left">#</th>
           <th class="p-3 text-left">Nama</th>
+          <th class="p-3 text-left">Email</th>
           <th class="p-3 text-left">Nomor Telepon</th>
           <th class="p-3 text-center">Aksi</th>
         </tr>
@@ -34,6 +35,7 @@
         >
           <td class="p-3">{{ index + 1 }}</td>
           <td class="p-3">{{ cust.name }}</td>
+          <td class="p-3">{{ cust.email }}</td>
           <td class="p-3">{{ cust.phone }}</td>
           <td class="p-3 text-center space-x-2">
             <button
@@ -79,6 +81,16 @@
           </div>
 
           <div class="mb-3">
+            <label class="block text-sm font-medium">Email</label>
+            <input
+              v-model="form.email"
+              type="email"
+              required
+              class="w-full border rounded p-2 mt-1"
+            />
+          </div>
+
+          <div class="mb-3">
             <label class="block text-sm font-medium">Telepon</label>
             <input
               v-model="form.phone"
@@ -118,10 +130,12 @@ import { useCustomerStore } from '../stores/customerStore'
 
 const store = useCustomerStore()
 const { customers, loading, error } = storeToRefs(store)
+// console.log(error)
+
 
 const showModal = ref(false);
 const modalType = ref("add");
-const form = ref({ name: "", phone: "" });
+const form = ref({ name: "", phone: "", email: "", password: "1234", role : "customer" });
 const editId = ref(null);
 
 const openModal = (type, customer = null) => {
@@ -130,9 +144,9 @@ const openModal = (type, customer = null) => {
 
   if (type === "edit" && customer) {
     editId.value = customer.id;
-    form.value = { name: customer.name, phone: customer.phone };
+    form.value = { name: customer.name, phone: customer.phone, email: customer.email };
   } else {
-    form.value = { name: "", phone: "" };
+    form.value = { name: "", phone: "", email: "", password: "1234", role : "customer"  };
   }
 };
 

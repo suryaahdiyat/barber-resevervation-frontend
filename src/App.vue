@@ -1,13 +1,7 @@
-<script setup>
-import CustomerListView from './views/CustomerListView.vue'
-</script>
-
 <template>
-  <!-- <div>
-    <h1 class="text-rose-900">Hello world</h1>
-  </div> -->
-  <CustomerListView />
+  <router-view />
 </template>
+
 
 
 
