@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Profile from "@/views/pages/Profile.vue";
 
 // Layouts
 import AdminLayout from "@/layouts/AdminLayout.vue";
@@ -8,9 +9,8 @@ import CustomerLayout from "@/layouts/CustomerLayout.vue";
 // Views
 import AdminDashboard from "@/views/admin/Dashboard.vue";
 import AdminReservations from "@/views/admin/Reservations.vue";
-import AdminPayments from "@/views/admin/Payments.vue";
+import AdminServices from "@/views/admin/Services.vue";
 import AdminUsers from "@/views/admin/Users.vue";
-import AdminProfile from "@/views/admin/Profile.vue";
 
 import BarberDashboard from "@/views/barber/Dashboard.vue";
 import BarberSchedule from "@/views/barber/MySchedule.vue";
@@ -26,9 +26,9 @@ const routes = [
     children: [
       { path: "", component: AdminDashboard },
       { path: "reservations", component: AdminReservations },
-      { path: "payments", component: AdminPayments },
+      { path: "services", component: AdminServices },
       { path: "users", component: AdminUsers },
-      { path: "profile", component: AdminProfile },
+      { path: "profile", component: Profile },
     ],
   },
   {
@@ -37,6 +37,7 @@ const routes = [
     children: [
       { path: "", component: BarberDashboard },
       { path: "my-schedule", component: BarberSchedule },
+      { path: "profile", component: Profile },
     ],
   },
   {
@@ -46,6 +47,7 @@ const routes = [
       { path: "", component: CustomerHome },
       { path: "reservation", component: CustomerReservation },
       { path: "my-reservations", component: CustomerMyReservations },
+      { path: "profile", component: Profile },
     ],
   },
 ];

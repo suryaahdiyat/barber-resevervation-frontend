@@ -20,5 +20,19 @@
   <body class="font-sans">
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <!-- <script>
+      // Cek apakah ada theme tersimpan
+      const savedTheme = localStorage.getItem("theme");
+
+      // Kalau ada, pakai itu
+      if (savedTheme) {
+        document.documentElement.className = savedTheme;
+      } else {
+        // Kalau belum ada, set default light
+        document.documentElement.className = "light";
+      }
+
+      console.log("Tema saat ini:", document.documentElement.className);
+    </script> -->
   </body>
 </html>

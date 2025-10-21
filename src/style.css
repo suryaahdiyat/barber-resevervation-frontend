@@ -1,4 +1,8 @@
-@import 'tailwindcss';
+/* src/style.css */
+@import "tailwindcss";
+
+/* Konfigurasi untuk dark mode berbasis class */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Konfigurasi Font dengan CSS-First Tailwind (Ganti tailwind.config.js)
    @theme akan memperluas (extend) tema default Tailwind.

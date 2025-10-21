@@ -1,7 +1,7 @@
 <!-- src/components/Navbar.vue -->
 <template>
   <nav
-    class="bg-black text-slate-100 shadow px-4 py-3 flex items-center justify-between sticky top-0 z-30"
+    class="dark:bg-black bg-white text-slate-950 dark:text-slate-100 shadow lg:shadow-none px-4 py-3 flex items-center justify-between sticky top-0 z-30"
   >
 
     <!-- Judul halaman -->
@@ -10,20 +10,20 @@
     <!-- Profil -->
     <div class="flex items-center space-x-3">
       <img
-        src="https://ui-avatars.com/api/?name=admin"
+        :src="`https://ui-avatars.com/api/?name=${role}`"
         alt="avatar"
         class="w-8 h-8 rounded-full"
       />
-      <span class="text-sm hidden sm:block">admin</span>
+      <span class="text-sm hidden sm:block">{{role}}</span>
     </div>
   </nav>
 </template>
 
 <script setup>
 defineProps({
-  title: {
+  role: {
     type: String,
-    default: "Dashboard",
+    default: "Customer",
   },
 });
 </script>

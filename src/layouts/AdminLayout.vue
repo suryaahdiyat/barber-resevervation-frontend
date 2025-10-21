@@ -1,13 +1,13 @@
 <!-- src/layouts/AdminLayout.vue -->
 <template>
-  <div class="bg-slate-950 h-screen w-full">
-    <Navbar title="Admin Dashboard" />
-    <main class="text-black">
-      <router-view />
-    </main>
+  <div class="dark:bg-slate-950 bg-slate-100 min-h-screen w-full pb-20">
+    <Navbar role="Admin" />
     <Sidebar
       role="admin"
     />
+    <main class="dark:text-slate-100 text-slate-950">
+      <router-view />
+    </main>
   </div>
 </template>
 

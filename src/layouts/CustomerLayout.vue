@@ -17,7 +17,7 @@
 
 <template>
   <div class="bg-slate-300 h-screen w-full">
-    <Navbar />
+    <Navbar role="Customer" />
     <main class="text-black">
       <router-view />
     </main>
