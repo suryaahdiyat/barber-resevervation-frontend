@@ -1,7 +1,7 @@
 <!-- src/components/Navbar.vue -->
 <template>
   <nav
-    class="dark:bg-black bg-white text-slate-950 dark:text-slate-100 shadow lg:shadow-none px-4 py-3 flex items-center justify-between sticky top-0 z-30"
+    class="dark:bg-black bg-white text-slate-950 dark:text-slate-100 shadow lg:shadow-none px-3 py-2 sm:px-4 sm:py-3 flex items-center justify-between sticky top-0 z-30"
   >
 
     <!-- Judul halaman -->

@@ -9,6 +9,7 @@ import CustomerLayout from "@/layouts/CustomerLayout.vue";
 // Views
 import AdminDashboard from "@/views/admin/Dashboard.vue";
 import AdminReservations from "@/views/admin/Reservations.vue";
+import AdminReservationPayment from "@/views/admin/ReservationPayment.vue";
 import AdminServices from "@/views/admin/Services.vue";
 import AdminUsers from "@/views/admin/Users.vue";
 
@@ -26,6 +27,11 @@ const routes = [
     children: [
       { path: "", component: AdminDashboard },
       { path: "reservations", component: AdminReservations },
+      {
+        path: "reservations/:id/payment",
+        component: AdminReservationPayment,
+        props: true,
+      },
       { path: "services", component: AdminServices },
       { path: "users", component: AdminUsers },
       { path: "profile", component: Profile },

@@ -5,12 +5,12 @@
   >
 
     <!-- Menu berdasarkan role -->
-    <nav class="dark:bg-black lg:static bg-white text-slate-800 dark:text-slate-400 shadow py-6 lg:py-4 flex justify-around items-center fixed bottom-0 right-0 left-0">
+    <nav class="dark:bg-black lg:static bg-white text-slate-800 dark:text-slate-400 shadow py-4 sm:py-6 lg:py-4 flex justify-around items-center fixed bottom-0 right-0 left-0">
       <RouterLink
         v-for="item in menu"
         :key="item.path"
         :to="item.path"
-        class="text-[14px] tracking-wider border-b-2 border-b-transparent dark:hover:border-b-slate-100 hover:border-slate-950 duration-75"
+        class="text-[10px] sm:text-[14px] tracking-wider border-b-2 border-b-transparent dark:hover:border-b-slate-100 hover:border-slate-950 duration-75"
         :class="{ 'dark:text-slate-100 text-slate-950 font-bold' : $route.path === item.path}"
       >
         {{ item.label }}
