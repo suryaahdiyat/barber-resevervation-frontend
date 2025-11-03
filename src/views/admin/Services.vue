@@ -57,7 +57,7 @@
       <!-- Jika belum ada preview baru tapi ada gambar lama -->
       <div v-else-if="!previewUrl && form.picture" class="relative mt-3 inline-block">
         <img
-          :src="`http://localhost:5050/uploads/${form.picture}`"
+          :src="`http://192.168.1.65:5050/uploads/${form.picture}`"
           alt="Current"
           class="w-32 h-32 object-cover rounded-lg border"
         />
@@ -148,7 +148,7 @@
             <dt class="font-medium text-gray-900 dark:text-white">Gambar</dt>
       
             <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">
-              <img v-if="selectedService.picture" class="w-full my-1" :src="`http://localhost:5050/uploads/${selectedService.picture}`" alt="Service Image" />
+              <img v-if="selectedService.picture" class="w-full my-1" :src="`http://192.168.1.65:5050/uploads/${selectedService.picture}`" alt="Service Image" />
               <div v-else>-</div>
             </dd>
           </div>

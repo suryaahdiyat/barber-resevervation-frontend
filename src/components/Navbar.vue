@@ -5,7 +5,7 @@
   >
 
     <!-- Judul halaman -->
-    <h1 class="text-lg font-semibold font-display tracking-wider text-cyan-600">MyBarber</h1>
+    <h1 class="text-lg font-semibold font-display tracking-wider dark:text-cyan-300 text-cyan-600">MyBarber</h1>
 
     <!-- Profil -->
     <div class="flex items-center space-x-3">

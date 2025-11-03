@@ -35,6 +35,11 @@ const routes = [
       { path: "services", component: AdminServices },
       { path: "users", component: AdminUsers },
       { path: "profile", component: Profile },
+      {
+        path: "profile/my-account",
+        component: () => import("@/views/pages/MyAccount.vue"),
+        // props: true,
+      },
     ],
   },
   {

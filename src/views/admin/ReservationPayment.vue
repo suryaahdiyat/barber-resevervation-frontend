@@ -135,7 +135,7 @@
 
         <button
           @click="$router.back()"
-          class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded w-full"
+          class="bg-gray-500 hover:bg-gray-600 hover:cursor-pointer duration-75 text-white px-3 py-1 rounded w-full"
         >
           Kembali
         </button>
