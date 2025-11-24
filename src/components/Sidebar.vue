@@ -49,19 +49,11 @@ const menu = computed(() => {
         { label: "Users", path: "/admin/users", icon: "bx-user" },
         { label: "Profile", path: "/admin/profile", icon: "bx-user-circle" },
       ];
-
-      // return [
-      //   { label: "Dashboard", path: "/admin" },
-      //   { label: "Reservations", path: "/admin/reservations" },
-      //   { label: "Services", path: "/admin/services" },
-      //   { label: "Users", path: "/admin/users" },
-      //   { label: "Profile", path: "/admin/profile" },
-      // ];
     case "barber":
       return [
-        { label: "Dashboard", path: "/barber" },
-        { label: "My Schedule", path: "/barber/my-schedule" },
-        { label: "Profile", path: "/barber/profile" },
+        { label: "Dashboard", path: "/barber", icon: "bx-home-alt" },
+        { label: "My Schedule", path: "/barber/my-schedule", icon: "bx-bookmarks" },
+        { label: "Profile", path: "/barber/profile", icon: "bx-user-circle" },
       ];
     case "customer":
       return [

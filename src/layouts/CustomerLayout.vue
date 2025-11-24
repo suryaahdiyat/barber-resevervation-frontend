@@ -1,6 +1,6 @@
 <template>
   <div class="dark:bg-slate-950 bg-slate-100 min-h-screen w-full pb-20">
-    <Navbar role="cust" />
+    <Navbar role="cust" userId="5" />
     <Sidebar
       role="customer"
     />

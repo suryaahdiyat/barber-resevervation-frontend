@@ -1,27 +1,40 @@
 <template>
   <div class="max-w-3xl mx-auto p-4">
     <h2 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">
-      Pembayaran Reservasi dengan detail
+      Pembayaran Reservasi Saya
     </h2>
 
     <div v-if="loading">Memuat data...</div>
 
     <div v-else>
+      <!-- Countdown -->
+      <div
+        v-if="countdown && paymentData.status === 'waiting'"
+        class="mt-4 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100 p-3 rounded-lg text-center font-medium"
+      >
+        Sisa waktu pembayaran:
+        <span class="font-bold">{{ countdown }}</span>
+      </div>
+
+      <!-- Kalau expired -->
+      <div
+        v-if="paymentExpired || paymentData.status === 'rejected'"
+        class="mt-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-3 rounded-lg text-center font-medium"
+      >
+        ⛔ Waktu pembayaran sudah habis
+      </div>
+      <div v-if="paymentExpired && paymentData.status === 'accepted'"
+        class="bg-green-100 text-green-800 p-4 rounded-lg mt-5 text-center"
+      >
+        Pembayaran sudah diverifikasi ✔
+        <!-- Tidak bisa mengubah bukti pembayaran lagi. -->
+      </div>
+
+
       <div v-if="paymentData" class="flow-root max-w-md md:max-w-2xl lg:max-w-4xl w-full mx-auto mt-3">
         <dl
           class="mt-1 divide-y divide-gray-200 text-sm *:odd:bg-gray-50 dark:divide-gray-700 dark:*:odd:bg-gray-800"
         >
-          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900 dark:text-white">Nama Pelanggan</dt>
-      
-            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">{{paymentData.reservation.customer.name}}</dd>
-          </div>
-      
-          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
-            <dt class="font-medium text-gray-900 dark:text-white">Email/ No Telp</dt>
-      
-            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">{{paymentData.reservation.customer.email ? paymentData.reservation.customer.email : paymentData.reservation.customer.phone ? paymentData.reservation.customer.phone : "-"}}</dd>
-          </div>
       
           <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900 dark:text-white">Tanggal/ Jam</dt>
@@ -36,7 +49,7 @@
           <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900 dark:text-white">Harga</dt>
       
-            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">Rp. {{ paymentData.reservation.service.price }}</dd>
+            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">{{ formatToK(paymentData.reservation.service.price) }}</dd>
           </div>
           <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900 dark:text-white">Status Pembayaran</dt>
@@ -47,9 +60,13 @@
             <dt class="font-medium text-gray-900 dark:text-white">Bukti Pembayaran</dt>
       
             <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">
-              <img v-if="paymentData.proof" class="w-full my-1" :src="`http://localhost:5050/uploads/${paymentData.proof}`" alt="Proof Image" />
+              <img v-if="paymentData.proof" class="w-full my-1" :src="`http://192.168.1.65:5050/uploads/${paymentData.proof}`" alt="Proof Image" />
               <div v-else>-</div>
             </dd>
+            <!-- <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">
+              <img v-if="paymentData.proof" class="w-full my-1" :src="`http://localhost:5050/uploads/${paymentData.proof}`" alt="Proof Image" />
+              <div v-else>-</div>
+            </dd> -->
           </div>
         </dl>
       </div>
@@ -85,7 +102,7 @@
         <!-- Jika belum ada preview baru tapi ada gambar lama -->
         <div v-else-if="!previewUrl && form.proof" class="relative mt-2 inline-block">
           <img
-            :src="`http://localhost:5050/uploads/${form.proof}`"
+            :src="`http://192.168.1.65:5050/uploads/${form.proof}`"
             alt="Current"
             class="w-32 h-32 object-cover rounded-lg border"
           />
@@ -105,40 +122,23 @@
             id="Gambar"
             ref="fileInput"
             @change="handleFileUpload"
+            :disabled="paymentExpired"
             class="mt-0.5 w-full px-2 py-2 lg:py-3 rounded border-gray-300 bg-gray-300 shadow-sm sm:text-sm text-slate-950 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
           />
         </label>
-        <!-- :disabled="paymentData.status === 'refund_pending' && paymentData.status === 'refunded'" -->
-        <!-- :class="!paymentData.status === 'refund_pending' && paymentData.status === 'refunded' ? 'bg-cyan-600 hover:cursor-pointer' : 'bg-rose-600 hover:cursor-not-allowed'" -->
         <button
-          type="submit"
-          class="bg-cyan-600 text-white w-full py-2 rounded duration-75"
-          >
-          Update Pembayaran
+        type="submit"
+        :disabled="paymentExpired"
+        class="text-white w-full py-2 rounded duration-75"
+        :class="!paymentExpired ? 'bg-cyan-600 hover:cursor-pointer' : 'bg-rose-600 hover:cursor-not-allowed'"
+        >
+          <!-- {{ !paymentExpired ? "Update Pembayaran" : "Pemabayaran Melewati Waktu" }}  -->
+            Update Pembayaran
         </button>
       </form>
 
       <div class="max-w-md mx-auto md:max-w-2xl lg:max-w-4xl">
         <div class="h-1 mt-2 my-2 w-full bg-gray-300 dark:bg-slate-100 rounded"></div>
-        <div class="flex flex-col sm:flex-row gap-2 my-2">
-          <button
-            v-if="paymentData.status !== 'refund_pending' && paymentData.status !== 'refunded'"
-            v-for="paymentStatus in availableStatusOptions"
-            :key="paymentStatus.key"
-            @click="paymentConfirmation(paymentStatus.key)"
-            class="flex-1 hover:cursor-pointer text-white px-3 py-2 rounded transition-colors"
-            :class="paymentStatus.active"
-          >
-            {{ paymentStatus.label }}
-          </button>
-          <button
-            v-if="paymentData.status === 'refund_pending'"
-            @click="handleRefund()"
-            class="flex-1 hover:cursor-pointer text-white px-3 py-2 rounded transition-colors bg-rose-600 hover:bg-rose-700"
-          >
-            Refund Berhasil
-          </button>
-        </div>
 
         <button
           @click="$router.back()"
@@ -152,7 +152,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 import api from "@/api/axios";
 import { toast } from "vue3-toastify";
 import CustomInput from "../../components/CustomInput.vue";
@@ -166,9 +167,12 @@ const selectedFile = ref(null);
 const previewUrl = ref(null);
 const fileInput = ref(null);
 
-// const imageUrl = computed(() => 
-//   `{import.meta.env.VITE_API_URL}:5050/uploads/${form.proof}`
-// );
+
+const countdown = ref("");
+const paymentExpired = ref(false);
+let timer = null;
+
+const route = useRoute();
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
@@ -176,7 +180,7 @@ const handleFileUpload = (event) => {
     selectedFile.value = file
     previewUrl.value = URL.createObjectURL(file)
   }
-}
+};
 
 const removeImage = () => {
   // Hapus gambar dari preview baru
@@ -223,7 +227,7 @@ const savePayment = async () => {
     });
     toast.success("Berhasil mengedit pembayaran!");
 
-    console.log(res.data);
+    // console.log(res.data);
 
     //riset form
     form.value = { payment_method: "", proof:"" };
@@ -250,7 +254,7 @@ const fetchPayments = async () => {
   try {
     const res = await api.get(`/payments/by-reservation/${reservationId}`);
     paymentData.value = res.data;
-    // console.log(paymentData.value)
+    console.log(paymentData.value)
     form.value.payment_method = paymentData.value.method;
     form.value.proof = paymentData.value.proof;
   } catch (err) {
@@ -260,52 +264,81 @@ const fetchPayments = async () => {
   }
 }
 
-const paymentConfirmation = async (status) => {
-  try {
-    await api.patch(`/payments/${paymentData.value.id}/status`, {
-      status: status
-    });
-    // console.log(status);
-    const statusMap = {
-      waiting: "pending",
-      accepted: "confirmed",
-      rejected: "cancelled"
-    };
-
-    const reservationStatus = statusMap[status] || "pending";
-
-
-    await api.put(`/reservations/${reservationId}/status`, { status : reservationStatus});
-    paymentData.value.status = status;
-    toast.success(`Berhasil Merubah Status Menjadi ${status}`);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const handleRefund = async () => {
-  try {
-    await api.patch(`/payments/${paymentData.value.id}/status`, {
-      status: 'refunded'
-    });
-
-    await api.put(`/reservations/${reservationId}/status`, { status : 'cancelled'});
-    paymentData.value.status = 'refunded'
-    toast.success(`Berhasil Refund ke pelanggan`);
-  } catch (err) {
-    console.error(err);
-  }
+if(route.query.created){
+  // toast.success("Reservasi berhasil dibuat.");
+  toast.success("Rerservasi berhasil dibuat.");
 }
 
-const availableStatusOptions = computed(() =>
-  [
-    { key: 'waiting', label: 'Tunda Pembayaran', active:'bg-yellow-600 hover:bg-yellow-700'},
-    { key: 'accepted', label: 'Konfirmasi Pembayaran', active:'bg-emerald-600 hover:bg-emerald-700' },
-    { key: 'rejected', label: 'Tolak Pembayaran', active:'bg-rose-600 hover:bg-rose-700' },
-  ].filter(s => s.key !== paymentData.value.status) // ✅ status sekarang dihilangkan
-);
+function startCountdown() {
+  if (!paymentData.value) return;
 
+  // Clear previous timer
+  if (timer) clearInterval(timer);
 
-onMounted(fetchPayments);
+  // Jika sudah diterima → langsung matikan semua
+  if (["accepted", "rejected"].includes(paymentData.value.status)) {
+    countdown.value = "00:00";
+    paymentExpired.value = true;
+    return;
+  }
 
+  const createdAt = new Date(paymentData.value.created_at);
+  // const deadline = new Date(createdAt.getTime() + 30 * 60 * 1000); // 30 menit
+  const deadline = new Date(createdAt.getTime() + 30 * 60 * 1000); // 5 menit
+  const halfTime = new Date(createdAt.getTime() + 15 * 60 * 1000); // 50% = 2.5 menit
+  let halfTimeNotified = false;
+
+  timer = setInterval(() => {
+    const now = new Date();
+    const diff = deadline - now;
+
+    // Notifikasi saat 50% waktu
+    if (!halfTimeNotified && now >= halfTime) {
+      toast.warning("Cepat! Sisa waktu bayar tinggal setengah!");
+      halfTimeNotified = true;
+    }
+
+    if (diff <= 0) {
+      countdown.value = "00:00";
+      paymentExpired.value = true;
+      clearInterval(timer);
+      return;
+    }
+
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+
+    countdown.value =
+      `${minutes.toString().padStart(2, "0")}:` +
+      `${seconds.toString().padStart(2, "0")}`;
+  }, 1000);
+};
+
+function formatToK(number) {
+    if (number === null || number === undefined) {
+        return 'Rp. -'; // Handle null atau undefined
+    }
+
+    // Pastikan input adalah angka, lalu bagi 1000
+    const valueInK = Number(number) / 1000;
+    
+    // Gunakan toLocaleString untuk memastikan pemisah ribuan (jika perlu)
+    // dan toFixed(0) untuk menghilangkan desimal jika input sudah kelipatan 1000
+    const formattedValue = valueInK.toLocaleString('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    
+    return `Rp. ${formattedValue}K`;
+}
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
+
+// onMounted(fetchPayments);
+onMounted(async () => {
+  await fetchPayments(); // fungsi kamu ambil paymentData
+  startCountdown();
+});
 </script>

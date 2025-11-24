@@ -6,7 +6,7 @@
       <button
         v-for="service in services"
         :key="service.id"
-        @click="select(service.id)"
+        @click="select(service.id, service.name, service.description, service.price, service.duration, service.picture)"
         class="w-full p-1 rounded shadow hover:cursor-pointer dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700 min-h-52 flex items-center flex-col"
       >
         <img v-if="service.picture" class="w-full max-h-40 object-cover rounded" :src="`http://192.168.1.65:5050/uploads/${service.picture}`" alt="Service Image" />
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { useReservationStore } from "@/stores/useReservationStore";
+import { useReservationStore, useReservationStoreHelper } from "@/stores/useReservationStore";
 import { ref, onMounted } from "vue";
 import api from "@/api/axios";
 
@@ -41,6 +41,7 @@ const services = ref([]);
 const loading = ref(false);
 
 const reservationStore = useReservationStore();
+const reservationStoreHelper = useReservationStoreHelper();
 
 const fetchServices = async () => {
   loading.value = true;
@@ -49,7 +50,7 @@ const fetchServices = async () => {
   try {
     const res = await api.get(endpoint);
     services.value = res.data;
-    console.log(services.value)
+    console.log(services.value);
   } catch (err) {
     console.error(err);
   } finally {
@@ -57,8 +58,13 @@ const fetchServices = async () => {
   }
 };
 
-function select(id) {
+function select(id, name, desc, price, duration, picture) {
   reservationStore.reservation.service_id = id;
+  reservationStoreHelper.reservationHelper.service_name = name;
+  reservationStoreHelper.reservationHelper.service_desc = desc;
+  reservationStoreHelper.reservationHelper.service_price = price;
+  reservationStoreHelper.reservationHelper.service_duration = duration;
+  reservationStoreHelper.reservationHelper.service_picture = picture;
   reservationStore.nextStep();
 }
 // Di dalam <script setup> atau methods:

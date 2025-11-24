@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Profile from "@/views/pages/Profile.vue";
+import NotificationPage from "@/views/pages/NotificationPage.vue";
 
 // Layouts
 import AdminLayout from "@/layouts/AdminLayout.vue";
@@ -19,8 +20,14 @@ import BarberSchedule from "@/views/barber/MySchedule.vue";
 import CustomerHome from "@/views/customer/Home.vue";
 import CustomerReservation from "@/views/customer/ReservationForm.vue";
 import CustomerMyReservations from "@/views/customer/MyReservations.vue";
+import CustomerMyReservationDetail from "@/views/customer/MyReservationDetail.vue";
 
 const routes = [
+  {
+    path: "/notifications/:userId",
+    component: NotificationPage,
+    props: true,
+  },
   {
     path: "/admin",
     component: AdminLayout,
@@ -58,7 +65,17 @@ const routes = [
       { path: "", component: CustomerHome },
       { path: "reservation", component: CustomerReservation },
       { path: "my-reservations", component: CustomerMyReservations },
+      {
+        path: "my-reservation/detail/payment/:id",
+        component: CustomerMyReservationDetail,
+        props: true,
+      },
       { path: "profile", component: Profile },
+      {
+        path: "profile/my-account",
+        component: () => import("@/views/pages/MyAccount.vue"),
+        // props: true,
+      },
     ],
   },
 ];

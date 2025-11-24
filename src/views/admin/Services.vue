@@ -108,7 +108,7 @@
             
             <td class="px-2 py-1">{{ (currentPage - 1) * perPage + index + 1 }}</td>
             <td class="px-2 py-1">{{ s.name }}</td>
-            <td class="px-2 py-1">Rp. {{ s.price }}</td>
+            <td class="px-2 py-1">{{ formatToK(s.price) }}</td>
             <td class="px-2 py-1">{{ s.duration }} m</td>
             <td class="px-2 py-1 text-center space-x-4">
               <button @click="editService(s)" title="update" class="text-cyan-500 text-base sm:text-2xl hover:cursor-pointer duration-75">
@@ -156,7 +156,7 @@
           <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
             <dt class="font-medium text-gray-900 dark:text-white">Harga</dt>
       
-            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">Rp. {{selectedService.price}}</dd>
+            <dd class="text-gray-700 sm:col-span-2 dark:text-gray-200">{{formatToK(selectedService.price)}}</dd>
           </div>
       
           <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
@@ -394,6 +394,24 @@ const deleteService = async (id) => {
     toast.error(message);
   }
 };
+
+function formatToK(number) {
+    if (number === null || number === undefined) {
+        return 'Rp. -'; // Handle null atau undefined
+    }
+
+    // Pastikan input adalah angka, lalu bagi 1000
+    const valueInK = Number(number) / 1000;
+    
+    // Gunakan toLocaleString untuk memastikan pemisah ribuan (jika perlu)
+    // dan toFixed(0) untuk menghilangkan desimal jika input sudah kelipatan 1000
+    const formattedValue = valueInK.toLocaleString('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    
+    return `Rp. ${formattedValue}K`;
+}
 
 onMounted(fetchServices);
 </script>

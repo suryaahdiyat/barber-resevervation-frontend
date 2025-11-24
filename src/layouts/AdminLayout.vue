@@ -1,7 +1,7 @@
 <!-- src/layouts/AdminLayout.vue -->
 <template>
   <div class="dark:bg-slate-950 bg-slate-100 min-h-screen w-full pb-20">
-    <Navbar role="Admin" />
+    <Navbar role="Admin" userId="1" />
     <Sidebar
       role="admin"
     />

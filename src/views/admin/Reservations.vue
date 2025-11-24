@@ -199,37 +199,16 @@
             :key="r.id"
             class="border-b-2 dark:border-b-slate-200 border-b-slate-300"
             :class="{
-              'border-l-4 border-l-yellow-500': r.status === 'pending',
-              'border-l-4 border-l-blue-500': r.status === 'ongoing',
-              'border-l-4 border-l-green-500': r.status === 'confirmed',
-              'border-l-4 border-l-red-500': r.status === 'cancelled',
-              'border-l-4 border-l-purple-400': !r.status
+              'border-l-4 border-l-amber-500': r.status === 'pending',           // Kuning - Menunggu
+              'border-l-4 border-l-blue-500': r.status === 'ongoing',           // Biru - Sedang berjalan
+              'border-l-4 border-l-emerald-500': r.status === 'confirmed',      // Hijau - Dikonfirmasi
+              'border-l-4 border-l-red-500': r.status === 'cancelled',          // Merah - Dibatalkan
+              'border-l-4 border-l-orange-500': r.status === 'need_admin_review', // Oranye - Butuh perhatian
+              'border-l-4 border-l-gray-400': !r.status || r.status === 'complete'// Abu-abu - Tidak ada status
             }"
             >
-            <!-- <td class="px-2 py-1 relative text-center">
-              <div class="flex items-center justify-center gap-2">
-                <span>{{ (currentPage - 1) * perPage + index + 1 }}</span>
-                <span
-                  class="inline-block h-2.5 w-2.5 rounded-full"
-                  :class="{
-                    'bg-yellow-400': r.payment.status === 'waiting',
-                    'bg-green-500': r.payment.status === 'accepted',
-                    'bg-rose-500': r.payment.status === 'rejected',
-                  }"
-                  :title="r.payment.status"
-                ></span>
-              </div>
-            </td> -->
             <td class="px-2 py-1 relative text-center">
               {{ (currentPage - 1) * perPage + index + 1 }}
-              <!-- <i
-                class="bx absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3"
-                :class="{
-                  'bx-time text-yellow-500': r.payment.status === 'waiting',
-                  'bx-check-circle text-green-500': r.payment.status === 'accepted',
-                  'bx-x-circle text-rose-500': r.payment.status === 'rejected',
-                }"
-              ></i> -->
             </td>
             <td class="px-2 py-1 max-w-[5px] sm:max-w-[50px] md:max-w-[80px] truncate text-ellipsis whitespace-nowrap">{{ r.customer?.name ? r.customer.name : "-" }}</td>
             <td class="px-2 py-1">{{ formatDateTime(r.date, r.time)}}</td>
@@ -248,9 +227,11 @@
                 <div
                 class="rounded-md text-white"
                 :class="{
-                  'bg-amber-500': r.payment.status === 'waiting',
-                  'bg-emerald-500': r.payment.status === 'accepted',
-                  'bg-rose-500': r.payment.status === 'rejected',
+                  'bg-amber-500': r.payment.status === 'waiting',      // Kuning - Menunggu
+                  'bg-emerald-500': r.payment.status === 'accepted',   // Hijau - Diterima
+                  'bg-red-500': r.payment.status === 'rejected',       // Merah - Ditolak
+                  'bg-orange-500': r.payment.status === 'refund_pending', // Oranye - Pending refund
+                  'bg-purple-500': r.payment.status === 'refunded',    // Ungu - Sudah refund
                 }"
                 >{{ r.payment.status }}</div>
                 <button
@@ -407,7 +388,7 @@ const handleSearch = async (query) => {
 
     toast.error(message);
   }
-}
+};
 
 const showDetail = async (id) => {
   const res = await api.get(`/reservations/${id}`)
@@ -432,7 +413,7 @@ const fetchReservations = async () => {
       },
     });
     reservations.value = res.data;
-    console.log(reservations.value)
+    // console.log(reservations.value)
   } catch (err) {
     console.error(err);
   } finally {

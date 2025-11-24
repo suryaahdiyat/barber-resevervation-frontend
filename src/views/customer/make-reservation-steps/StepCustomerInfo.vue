@@ -14,26 +14,28 @@
         id="email"
         type="email"
         v-model="reservation.email"
-        placeholder="Masukkan email"
+        :disabled="true"
         inputClass="w-1/2"
       />
       <CustomInput
         label="No Telp"
         id="phone"
         v-model="reservation.phone"
-        placeholder="Masukkan no telp"
+        :disabled="true"
         inputClass="w-1/2"
       />
     </div>
     <CustomInput
-      label="Catatan"
+      label="Catatan (opsional)"
       id="note"
       v-model="reservation.note"
       placeholder="Catatan..."
     />
 
-    <button @click="reservationStore.prevStep" class="bg-gray-500 hover:bg-gray-600 hover:cursor-pointer duration-75 text-white px-3 py-1 rounded">Kembali</button>
-    <button @click="next" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 duration-75 hover:cursor-pointer ml-2 text-white rounded">Lanjut</button>
+    <div class="w-full flex justify-between items-center mt-2">
+      <button @click="reservationStore.prevStep" class="bg-gray-500 hover:bg-gray-600 hover:cursor-pointer duration-75 text-white w-1/2 py-2 rounded">Kembali</button>
+      <button @click="next" class="w-1/2 py-2 bg-cyan-600 hover:bg-cyan-500 duration-75 hover:cursor-pointer ml-2 text-white rounded">Berikutnya</button>
+    </div>
   </div>
 </template>
 
@@ -44,6 +46,11 @@ import { toast } from "vue3-toastify";
 
 const reservationStore = useReservationStore();
 const reservation = reservationStore.reservation;
+
+//ambil dari data login
+reservation.name = "cust"
+reservation.email = "cust@mail.id";
+reservation.phone = null;
 
 const next = () => {
   if(reservation.name && (reservation.email || reservation.phone)) {
