@@ -30,9 +30,11 @@
         <button
           v-for="paymentStatus in [
             { key: 'all', label: 'All', inactive: 'border-cyan-600 text-cyan-600', active:'bg-cyan-600 text-slate-100'},
-            { key: 'waiting', label: 'Waiting', inactive: 'border-yellow-600 text-yellow-600', active:'bg-yellow-600 text-slate-100'},
+            { key: 'waiting', label: 'Waiting', inactive: 'border-amber-500 text-amber-500', active:'bg-amber-500 text-slate-100'},
             { key: 'accepted', label: 'Accepted', inactive: 'border-emerald-600 text-emerald-600', active:'bg-emerald-600 text-slate-100' },
-            { key: 'rejected', label: 'Rejected', inactive: 'border-rose-600 text-rose-600', active:'bg-rose-600 text-slate-100' },
+            { key: 'rejected', label: 'Rejected', inactive: 'border-red-600 text-red-600', active:'bg-red-600 text-slate-100' },
+            { key: 'refund_pending', label: 'Refund Pending', inactive: 'border-orange-500 text-orange-500', active:'bg-orange-500 text-slate-100' },
+            { key: 'refunded', label: 'Refunded', inactive: 'border-purple-400 text-purple-400', active:'bg-purple-400 text-slate-100' },
           ]"
           :key="paymentStatus.key"
           @click="filterPaymentStatus(paymentStatus.key)"
@@ -72,6 +74,7 @@
       </button>
     </div>
     <div v-else class="text-slate-400 w-full text-center">tidak ada data</div>
+    <!-- <div class="text-orange-500 w-full text-center">tidak ada data</div> -->
   </div>
 </template>
 

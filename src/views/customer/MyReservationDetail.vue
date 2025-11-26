@@ -27,7 +27,16 @@
         class="bg-green-100 text-green-800 p-4 rounded-lg mt-5 text-center"
       >
         Pembayaran sudah diverifikasi ✔
-        <!-- Tidak bisa mengubah bukti pembayaran lagi. -->
+      </div>
+      <div v-if="paymentExpired && paymentData.status === 'refund_pending'"
+        class="bg-orange-100 text-orange-800 p-4 rounded-lg mt-5 text-center"
+      >
+        Dalam proses refund
+      </div>
+      <div v-if="paymentExpired && paymentData.status === 'refunded'"
+        class="bg-purple-100 text-purple-800 p-4 rounded-lg mt-5 text-center"
+      >
+        Refund selesai
       </div>
 
 
@@ -276,7 +285,7 @@ function startCountdown() {
   if (timer) clearInterval(timer);
 
   // Jika sudah diterima → langsung matikan semua
-  if (["accepted", "rejected"].includes(paymentData.value.status)) {
+  if (["accepted", "rejected", "refund_pending", "refunded"].includes(paymentData.value.status)) {
     countdown.value = "00:00";
     paymentExpired.value = true;
     return;

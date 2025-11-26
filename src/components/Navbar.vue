@@ -122,6 +122,9 @@ defineProps({
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import api from "@/api/axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 const props = defineProps({
   role: {
@@ -206,7 +209,7 @@ const toggleNotifications = () => {
 
 // Handle notification click
 const handleNotificationClick = (notification) => {
-  console.log('Notification clicked:', notification)
+  // console.log('Notification clicked:', notification)
   
   // Mark as read jika belum dibaca
   if (!notification.is_read) {
@@ -215,7 +218,7 @@ const handleNotificationClick = (notification) => {
   
   // TODO: Handle navigation berdasarkan type notifikasi
   // if (notification.related_entity === 'reservation') {
-  //   $router.push(`/reservations/${notification.related_entity_id}`)
+  router.push(`${notification.action_url}`)
   // }
   
   // Tutup dropdown setelah klik
