@@ -42,11 +42,11 @@
       </div>
     </div>
     <div v-if="reservations.length > 0" class="space-y-2">
+      <!-- @click="$router.push(`/my-reservation/detail/payment/${r.id}`)" -->
       <button
         v-for="r in reservations"
         :key="r.id"
-        @click="$router.push(`/my-reservation/detail/payment/${r.id}`)"
-        class="w-full py-2 px-2 border border-slate-300 hover:cursor-pointer duration-75 rounded-lg shadow"
+        class="w-full py-2 px-2 border border-slate-300 hover:shadow-md duration-75 rounded-lg shadow"
       >
         <div class="mt-1 px-1 flex text-start w-full justify-between items-center">
           <p class="w-3/4">{{ r.service.name }}</p>
@@ -106,7 +106,7 @@ const filterReservationStatus = (key) => {
 
 const fetchMySchedules = async () => {
   // nanti abil dari login
-  const barberId = 2;
+  const barberId = 4;
   const endpoint = `reservations/barber/${barberId}`;
 
   loading.value = true;
@@ -118,7 +118,7 @@ const fetchMySchedules = async () => {
       },
     });
     reservations.value = res.data;
-    // console.log(reservations.value)
+    console.log(reservations.value)
   } catch (err) {
     console.error(err);
   } finally {
