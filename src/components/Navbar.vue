@@ -36,7 +36,7 @@ defineProps({
       <div class="relative">
         <button 
           @click="toggleNotifications"
-          class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors relative"
+          class="p-2 hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-800 rounded-full transition-colors relative"
         >
           <i class='bx bx-bell text-xl'></i>
           <!-- Red dot indicator -->
