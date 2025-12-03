@@ -62,7 +62,7 @@ const routes = [
     path: "/",
     component: CustomerLayout,
     children: [
-      { path: "", component: CustomerHome },
+      // { path: "", component: CustomerHome },
       { path: "reservation", component: CustomerReservation },
       { path: "my-reservations", component: CustomerMyReservations },
       {

@@ -115,7 +115,7 @@ const menu = computed(() => {
       ];
     case "customer":
       return [
-        { label: "Home", path: "/", icon: "bx-home-alt", pattern: /^\/$/ },
+        // { label: "Home", path: "/", icon: "bx-home-alt", pattern: /^\/$/ },
         { label: "Make Reservation", path: "/reservation", icon: "bx-calendar-plus", pattern: /^\/reservation/ },
         { label: "My Reservations", path: "/my-reservations", icon: "bx-bookmarks", pattern: /^\/my-reservation/ }, // Perhatikan pattern-nya!
         { label: "Profile", path: "/profile", icon: "bx-user-circle", pattern: /^\/profile/ },
