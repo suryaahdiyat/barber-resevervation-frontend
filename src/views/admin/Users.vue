@@ -3,17 +3,19 @@ import { ref, onMounted, computed } from "vue";
 import api from "@/api/axios";
 import { toast } from "vue3-toastify";
 import SearchBar from "../../components/SearchBar.vue";
+import CustomInput from "../../components/CustomInput.vue";
 import Loader from "../../components/Loader.vue";
 import Pagination from "../../components/Pagination.vue";
 
 const users = ref([]);
 const currentRole = ref("ca"); // default: tampilkan semua
 const loading = ref(false);
+const loadingDetail = ref(false);
 const showForm = ref(false);
 const isShowDetail = ref(false)
 
 const selectedUser = ref(null)
-let cust_reservations = ref(null)
+const cust_reservations = ref([])
 let isSearch = false
 
 //for the pagination
@@ -100,10 +102,21 @@ const fetchUsers = async () => {
 };
 
 const showDetail = async (id) => {
-  const res = await api.get(`/users/${id}`)
-  selectedUser.value = res.data
-  cust_reservations = selectedUser.value.customer_reservations
-  isShowDetail.value = true
+  // const res = await api.get(`/users/${id}`)
+  // selectedUser.value = res.data
+  // cust_reservations = selectedUser.value.customer_reservations
+  // isShowDetail.value = true
+  loadingDetail.value = true;
+  try {
+    const res = await api.get(`/users/${id}`)
+    selectedUser.value = res.data
+    cust_reservations.value = selectedUser.value.customer_reservations || []
+    isShowDetail.value = true
+  } catch (error) {
+    toast.error("Gagal memuat detail pengguna")
+  } finally {
+    loadingDetail.value = false;
+  }
 }
 
 const toggleDetail = () => {
@@ -187,7 +200,6 @@ onMounted(fetchUsers);
   <div class="p-4 space-y-6">
     <div class="max-w-md md:max-w-2xl lg:max-w-4xl w-full mx-auto">
       <h1 class="text-xl font-semibold dark:text-slate-100 text-slate-950">Kelola Pengguna</h1>
-      <!-- Tombol Toggle -->
       <button
         @click="toggleForm"
         class="mt-2 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition"
@@ -195,49 +207,36 @@ onMounted(fetchUsers);
         {{ showForm ? "Sembunyikan Form" : "Tampilkan Form" }}
       </button>
     </div>
-
-    <!-- FORM USER -->
     <form v-if="showForm" @submit.prevent="saveUser" class="text-slate-100 space-y-4 max-w-md mx-auto md:max-w-2xl lg:max-w-4xl">
-      <!-- <input v-model="form.name" placeholder="Nama" class="w-full p-2 rounded border-b-4 boder-b-slate-100 focus:ring-0 active:border-none" /> -->
-      <label for="Name" class="block">
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-200"> Nama </span>
-        <input
-          v-model="form.name"
-          type="text"
-          id="Name"
-          class="mt-0.5 w-full px-2 py-2 lg:py-3 rounded border-gray-300 bg-gray-300 shadow-sm sm:text-sm text-slate-950 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+      <CustomInput
+        label="Nama"
+        id="name"
+        v-model="form.name"
+        placeholder="Masukkan nama"
+      />
+      <div class="flex mb-2 justify-between items-center gap-4 w-full">
+        <CustomInput
+          label="Email"
+          id="email"
+          type="email"
+          v-model="form.email"
+          placeholder="Masukkan email"
         />
-      </label>
-      <div class="flex justify-between items-center gap-4 w-full">
-
-        <label for="Email" class="block w-1/2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-200"> Email </span>
-          <input
-            v-model="form.email"
-            type="email"
-            id="Email"
-            class="mt-0.5 w-full px-2 py-2 lg:py-3 rounded border-gray-300 bg-gray-300 shadow-sm sm:text-sm text-slate-950 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-          />
-        </label>
-        <label for="Phone" class="block w-1/2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-200"> No Telp </span>
-          <input
-            v-model="form.phone"
-            type="text"
-            id="Phone"
-            class="mt-0.5 w-full px-2 py-2 lg:py-3 rounded border-gray-300 bg-gray-300 shadow-sm sm:text-sm text-slate-950 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-          />
-        </label>
+        <CustomInput
+          label="No Telp"
+          id="phone"
+          v-model="form.phone"
+          placeholder="Masukkan no telp"
+        />
       </div>
       <label v-if="form.role != 'customer'" for="Role" class="block">
         <span class="text-sm font-medium text-gray-700 dark:text-gray-200"> Role </span>
         <select v-model="form.role" class="w-full border border-gray-200 bg-gray-300 dark:bg-gray-900 shadow p-2 lg:py-3 rounded text-slate-950 dark:text-slate-100" id="Role">
-          <option value="admin" class="text-black">Admin</option>
-          <option value="cashier" class="text-black">Kasir</option>
-          <option value="barber" class="text-black">Barber</option>
+          <option value="admin">Admin</option>
+          <option value="cashier" class="">Kasir</option>
+          <option value="barber" class="">Barber</option>
         </select>
       </label>
-      <!-- <input v-model="form.email" placeholder="Email" class="w-full border p-2 rounded" /> -->
       <button type="submit" class="bg-cyan-600 text-white w-full py-2 rounded hover:cursor-pointer duration-75">
         {{ editingId ? "Update" : "Tambah" }}
       </button>
@@ -256,13 +255,16 @@ onMounted(fetchUsers);
         class="px-3 py-2 rounded hover:cursor-pointer duration-75"
         :class="currentRole === role.key ? 'bg-cyan-600 text-slate-100' : 'dark:bg-slate-100 bg-slate-950 text-slate-100 hover:bg-gray-600 dark:hover:bg-gray-100 dark:text-slate-950'"
       >
-        {{ role.label }}
+        <span>
+          {{ role.label }}
+        </span>
+        <!-- <span v-if="currentRole === role.key" class="text-xs"> ✓</span> -->
       </button>
     </div>
-
-    <!-- TABEL USER -->
     <SearchBar placeholder="Cari nama/emai/no telp pengguna ..." @search="handleSearch" />
+
     <Loader :visible="loading" />
+
     <div v-if="paginatedUsers.length > 0">
       <table v-if="!loading" class="dark:bg-slate-600 bg-slate-200 rounded-sm text-[12px] overflow-hidden text-center max-w-md md:max-w-2xl lg:max-w-4xl w-full mx-auto">
         <thead class="dark:bg-gray-700 bg-gray-600 text-slate-100 dark:text-slate-100 border-b-2 dark:border-slate-100 border-slate-800">
@@ -274,7 +276,7 @@ onMounted(fetchUsers);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, index) in paginatedUsers" :key="user.id" class="border-b-2 dark:border-slate-200 border-slate-300">
+          <tr v-for="(user, index) in paginatedUsers" :key="user.id" class="border-b-2 dark:border-slate-200 border-slate-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
   
             <td class="px-2 py-1">{{ (currentPage - 1) * perPage + index + 1 }}</td>
             <td class="px-2 py-1 max-w-[5px] sm:max-w-[50px] md:max-w-[80px] truncate text-ellipsis whitespace-nowrap">{{ user.name }}</td>
@@ -294,7 +296,6 @@ onMounted(fetchUsers);
           </tr>
         </tbody>
       </table>
-      <!-- Pagination -->
       <Pagination
         :currentPage="currentPage"
         :totalPages="totalPages"
@@ -367,30 +368,5 @@ onMounted(fetchUsers);
       </div>
     </div>
     <p v-else class="w-full text-slate-400 text-center">Belum ada data</p>
-
-    <!-- <div
-      v-if="isModalOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-96 shadow-lg relative">
-        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
-          Detail Pengguna
-        </h3>
-
-        <div v-if="selectedUser">
-          <p><span class="font-semibold">Nama:</span> {{ selectedUser.name }}</p>
-          <p><span class="font-semibold">Email:</span> {{ selectedUser.email }}</p>
-          <p><span class="font-semibold">Phone:</span> {{ selectedUser.phone }}</p>
-          <p><span class="font-semibold">Role:</span> {{ selectedUser.role }}</p>
-        </div>
-
-        <button
-          @click="isModalOpen = false"
-          class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-        >
-          ✕
-        </button>
-      </div>
-    </div> -->
   </div>
 </template>

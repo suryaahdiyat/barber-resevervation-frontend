@@ -111,7 +111,7 @@
         <!-- Jika belum ada preview baru tapi ada gambar lama -->
         <div v-else-if="!previewUrl && form.proof" class="relative mt-2 inline-block">
           <img
-            :src="`http://192.168.1.65:5050/uploads/${form.proof}`"
+            :src="`http://192.168.1.66:5050/uploads/${form.proof}`"
             alt="Current"
             class="w-32 h-32 object-cover rounded-lg border"
           />

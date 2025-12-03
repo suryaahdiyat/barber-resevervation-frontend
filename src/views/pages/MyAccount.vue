@@ -193,29 +193,5 @@ const updatePassword = async () => {
   }
 };
 
-
-// const editUser = (user) => {
-//   form.value = { name: user.name, email: user.email, phone: user.phone, role: user.role };
-//   editingId.value = user.id;
-//   showForm.value = true;
-// };
-
-// const deleteUser = async (id) => {
-//   if (!confirm("Yakin ingin hapus user ini?")) return;
-//   try {
-//     await api.delete(`/users/${id}`);
-//     fetchUsers();
-//     toast.success("Berhasil menghapus pengguna!")
-//   } catch (err) {
-//     console.error(err);
-//       const message =
-//       err.response?.data?.message || // pesan dari backend (res.status().json({ message: "..."}))
-//       err.message || // pesan dari axios sendiri (misal timeout)
-//       "Terjadi kesalahan saat menghapus data."; // fallback pesan default
-
-//     toast.error(message);
-//   }
-// };
-
 onMounted(fetchUser);
 </script>

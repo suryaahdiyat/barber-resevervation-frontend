@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 space-y-2">
+  <div class="p-2 space-y-2 mx-auto md:max-w-2xl lg:max-w-4xl">
     <button @click="goToMyAccount" class="py-4 rounded-md w-full bg-white dark:bg-slate-800 hover:cursor-pointer duration-75 shadow">
       Akun Saya
     </button>
